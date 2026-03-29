@@ -1,74 +1,64 @@
-import { TPayment, IBuyer, IBuyerValidateErr } from "../../../types/index";
+import { TPayment, IBuyer, IBuyerValidateErr } from "../../types/index";
 
 export class Buyer {
-  private _payment: TPayment = "";   //поле для хранения данных о виде оплаты
-  private _email: string = "";       //поле для хранения данных о email
-  private _phone: string = "";       //поле для хранения данных о номере телефона
-  private _address: string = "";     //поле для хранения данных об адреcе доставки
+  private payment: TPayment = "";   //поле для хранения данных о виде оплаты
+  private email: string = "";       //поле для хранения данных о email
+  private phone: string = "";       //поле для хранения данных о номере телефона
+  private address: string = "";     //поле для хранения данных об адреcе доставки
 
-  constructor(
-    payment: TPayment = "",
-    email: string = "",
-    phone: string = "",
-    address: string = "",
-  ) {
-    this.payment = payment;  // сеттер вид оплаты
-    this.email = email;      // сеттер емэйл
-    this.phone = phone;      // сеттер телефон
-    this.address = address;  // сеттер адрес
-  }
+ constructor() {}
 
   //Сохранение данных о виде оплаты, которые передаются в параметре, в модели
-  set payment(value: TPayment) {
-    this._payment = value;
+  set paymentSet(value: TPayment) {
+    this.payment = value;
   }
 
   //Сохранение данных о email в модели
-  set email(value: string) {
-    this._email = value;
+  set emailSet(value: string) {
+    this.email = value;
   }
 
   //Сохранение данных  о номере телефона в модели
-  set phone(value: string) {
-    this._phone = value;
+  set phoneSet(value: string) {
+    this.phone = value;
   }
 
   //Сохранение данных об адреcе в модели
-  set address(value: string) {
-    this._address = value;
+  set addressSet(value: string) {
+    this.address = value;
   }
 
   //Получение всех данных покупателя в виде объекта, соответствующего интерфейсу IBuyer
   get buyerData(): IBuyer {
     return {
-      payment: this._payment,
-      email: this._email,
-      phone: this._phone,
-      address: this._address,
+      payment: this.payment,
+      email: this.email,
+      phone: this.phone,
+      address: this.address,
     };
   }
 
   //Очистка данных покупателя
   clearBuyerData(): void {
-    this._payment = "";
-    this._email = "";
-    this._phone = "";
-    this._address = "";
+    this.payment = "";
+    this.email = "";
+    this.phone = "";
+    this.address = "";
   }
 
   //Проверка данных покупателя на валидность. Результат - объект, относящийся к интерфейсу IBuyerValidateErr. В объекте присутствуют поля, соответствующие полям класса, значениями у которых является текст ошибки. Если поле не содержит ошибок, то такое свойство в объекте отсутствует
   validateBuyerData(): IBuyerValidateErr {
     const validateBuyer: IBuyerValidateErr = {};
-    if (this._payment === "") {
+    if (this.payment === "") {
       validateBuyer.payment = "Не выбран вид оплаты";
     }
-    if (this._email === "") {
+    if (this.email === "") {
       validateBuyer.email = "Укажите емэйл";
     }
-    if (this._phone === "") {
+    if (this.phone === "") {
       validateBuyer.phone = "Укажите номер телефона";
     }
-    if (this._address === "") {
+    if (this.address === "") {
       validateBuyer.address = "Укажите адрес доставки";
     }
     return validateBuyer;
