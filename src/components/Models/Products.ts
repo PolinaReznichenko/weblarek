@@ -21,7 +21,7 @@ export class Products {
   }
 
   //Cохранение выбранного товара, полученного в параметре, для подробного отображения
-  set productSet(product: IProduct | null) {
+  set productSet(product: IProduct) {
     this.product = product;
   }
 
