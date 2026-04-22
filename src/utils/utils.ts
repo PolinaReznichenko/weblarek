@@ -27,21 +27,21 @@ export function ensureAllElements<T extends HTMLElement>(selectorElement: Select
 
 export type SelectorElement<T> = T | string;
 
-export function ensureElement<T extends HTMLElement>(selectorElement: SelectorElement<T>, context?: HTMLElement): T {
-    if (isSelector(selectorElement)) {
-        const elements = ensureAllElements<T>(selectorElement, context);
+export function ensureElement<T extends HTMLElement>(selectorElement: SelectorElement<T>, context?: HTMLElement): T {  //Если передан второй параметр, то поиск элементов по селектору будет выполняться только внутри этого контейнера. Если не передан – поиск идёт по всему документу. Возвращается конкретный HTML-элемент
+    if (isSelector(selectorElement)) {  //проверка, является ли selectorElement строкой
+        const elements = ensureAllElements<T>(selectorElement, context);  //возвращается массив элементов
         if (elements.length > 1) {
-            console.warn(`selector ${selectorElement} return more then one element`);
+            console.warn(`selector ${selectorElement} return more then one element`);  //предупреждение
         }
         if (elements.length === 0) {
             throw new Error(`selector ${selectorElement} return nothing`);
         }
-        return elements.pop() as T;
+        return elements.pop() as T;  //удаляет последний элемент из массива и возвращает его
     }
-    if (selectorElement instanceof HTMLElement) {
-        return selectorElement as T;
+    if (selectorElement instanceof HTMLElement) {  //если selectorElement DOM-элемент
+        return selectorElement as T;  //вернуть элемент
     }
-    throw new Error('Unknown selector element');
+    throw new Error('Unknown selector element');  //если недопустимый тип элемента
 }
 
 export function cloneTemplate<T extends HTMLElement>(query: string | HTMLTemplateElement): T {

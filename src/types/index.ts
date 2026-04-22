@@ -55,3 +55,7 @@ export interface IOrderConfirm {
   id: string; //id заказа
   total: number; //покупка на сумму
 }
+
+export interface ICardActions {
+  onClick: () => void;
+}
