@@ -387,21 +387,20 @@ interface IBasketCard {
 
 Класс является абстрактным и родительским для классов ContactsForm и OrderForm. Содержит в себе общий функционал форм для заполнения данными, необходимыми для оформления товара. Является наследником класса Component и реализует интерфейс IForm.  
 ```
-interface IForm {  
-  inputData: string;  //данные, которые находятся в поле формы  
+interface IForm {    
   disabledButton: boolean;  //активная/заблокированная кнопка  
   error?: string;  //необязательное поле с ошибкой заполнения  
 }  
 ```  
- Конструктор класса не принимает параметров.  
+Конструктор:  
+ `constructor(container: HTMLElement)` - В конструктор передается корневой DOM-элемент компонента, который, в свою очередь, передаётся в конструктор при создании экземпляров дочерних классов.  
 
  Поля класса:  
- `protected abstract formElement: HTMLFormElement` - абстрактное поле для хранения HTML элемента формы.  
- `protected abstract submitButton: HTMLButtonElement` - абстрактное поле для хранения HTML элемента кнопки, отправляющей данные о заказе на сервер.  
- `protected abstract errorElement?: HTMLElement` - абстрактное необязательное поле для хранения HTML элемента, обрабатывающего ошибки заполения формы.  
+ `protected submitButton: HTMLButtonElement` - поле для хранения HTML элемента кнопки, отправляющей данные о заказе на сервер.  
+ `protected errorElement: HTMLElement` - поле для хранения HTML элемента, содержащего текст ошибки заполения формы.  
+ ` protected inputElements: HTMLInputElement[]` - поле для хранения массива HTML элементов инпутов формы, необходимых для установки на каждый из них слушателя событий.  
 
  Методы класса:  
-`abstract set inputData(value: string): void` - абстрактный метод, который устанавливает значение в поле формы.  
 `set disabledButton(disabled: boolean): void` - метод, который делает кнопку активной или блокирует ее.  
 `set error(message: string): void` - метод, который добавляет текст ошибки, если поле не заполнено.  
 `abstract resetForm(): void` - абстрактный метод, который очищает все поля формы.  
@@ -411,7 +410,7 @@ interface IForm {
 Класс наследуется от класса Form. Отвечает за отображение формы, заполняемой данными о способе оплаты товар(а/ов) и об адресе доставки. Реализует интерфейс IOrderForm.  
 ```
 interface IOrderForm {  
-  selectedButton: Pick<TPayment, "card" | "cash">;  //кнопка с выбранным видом оплаты
+  selectedButton: TPayment;  //кнопка с выбранным видом оплаты
 }  
 ```  
  Конструктор:  
@@ -422,8 +421,7 @@ interface IOrderForm {
  `protected orderButtons: HTMLButtonElement []` - поле для хранения массива HTML элементов кнопок, которые отвечают за вид оплаты.  
 
  Методы класса:  
-`set InputData(value: string): void` - метод, который устанавливает значение в поле формы.  
-`set selectedButton(method: Pick<TPayment, "card" | "cash">): void` - метод, который устанавливает модификатор для выделения кнопки с выбранным видом оплаты.  
+`set selectedButton(method: TPayment): void` - метод, который устанавливает модификатор для выделения кнопки с выбранным видом оплаты.  
 `resetForm(): void` - метод, который очищает все поля формы.  
 
 #### Класс ContactsForm
@@ -438,6 +436,5 @@ interface IOrderForm {
  `protected phoneInput: HTMLInputElement` - поле для хранения HTML элемента инпута формы, отвечающего за номере телефона покупателя.  
 
  Методы класса:  
-`set InputData(value: string): void` - метод, который устанавливает значение в поле формы.   
 `resetForm(): void` - метод, который очищает все поля формы.  
 

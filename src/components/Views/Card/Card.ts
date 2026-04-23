@@ -24,6 +24,6 @@ export abstract class Card<T> extends Component<ICard & T> {
 
     //Устанавливает стоимость товара для карточки
     set price(value: number) {
-        this.priceElement.textContent = `${String(value)} синапсов`;
+        this.priceElement.textContent = value ? `${String(value)} синапсов` : 'Бесценно';
     }
 }
