@@ -1,15 +1,13 @@
 import {  Card } from '../../Views/Card/Card';
 import {  ensureElement } from '../../../utils/utils';
-import { categoryMap } from '../../../utils/constants'
+import { categoryMap } from '../../../utils/constants';
+import { IProduct } from '../../../types/index';
 
 type CategoryKey = keyof typeof categoryMap;
 
-export interface IFullCard {
-    category: string;
-    image: string;
-};
+export type TFullCard = Pick<IProduct, 'category' | 'image'>;
 
-export abstract class FullCard<T> extends Card<IFullCard & T> {
+export abstract class FullCard<T> extends Card<TFullCard & T> {
     protected categoryElement: HTMLElement;  //элемент, содержащий название категории, к которой относится товар
     protected imageElement: HTMLImageElement;  //элемент изображения, в котором находятся данные об этом изображении
 

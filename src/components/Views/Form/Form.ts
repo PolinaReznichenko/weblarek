@@ -2,7 +2,7 @@ import {  Component } from '../../base/Component';
 import {  ensureElement, ensureAllElements } from '../../../utils/utils';
 import {  IEvents } from '../../base/Events';
 
-export interface IForm {
+interface IForm {
     disabledButton: boolean;
     error?: string;
 }

@@ -26,9 +26,7 @@ export class Basket extends Component<IBasket> {
 
     //Добавляет массив карточек товаров в корзину
     set cardList(items: HTMLElement[]) {
-        items.forEach(item => {
-            this.cardListElement.appendChild(item);
-        })
+        this.cardListElement.replaceChildren(...items);
     }
 
     //Устанавливает итоговую стоимость всех выбранных товаров

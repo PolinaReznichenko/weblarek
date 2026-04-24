@@ -1,12 +1,10 @@
 import {  Component } from '../../base/Component';
 import {  ensureElement } from '../../../utils/utils';
+import { IProduct } from '../../../types/index';
 
-interface ICard {
-    title: string;
-    price: number;
-}
+type TCard = Pick<IProduct, 'title' | 'price'>;
 
-export abstract class Card<T> extends Component<ICard & T> {
+export abstract class Card<T> extends Component<TCard & T> {
     protected titleElement: HTMLElement;  //элемент, содержащий название товара
     protected priceElement: HTMLElement;  //элемент, содержащий стоимость товара
 
@@ -23,7 +21,7 @@ export abstract class Card<T> extends Component<ICard & T> {
     }
 
     //Устанавливает стоимость товара для карточки
-    set price(value: number) {
+    set price(value: number | null) {
         this.priceElement.textContent = value ? `${String(value)} синапсов` : 'Бесценно';
     }
 }

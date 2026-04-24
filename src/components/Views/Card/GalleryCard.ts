@@ -1,8 +1,8 @@
 import { ICardActions } from '../../../types/index';
 import {  FullCard } from '../../Views/Card/FullCard';
-import {  IFullCard } from '../../Views/Card/FullCard';
+import {  TFullCard } from '../../Views/Card/FullCard';
 
-export class GalleryCard extends FullCard<IFullCard> {
+export class GalleryCard extends FullCard<TFullCard> {
     constructor(container: HTMLElement, actions?: ICardActions) {  //передается обработчик (функция) с эмитом события с данными
         super(container);  //вызов родительского конструктора
 

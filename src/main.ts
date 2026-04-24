@@ -6,10 +6,13 @@ import { Buyer } from "./components/Models/Buyer";
 import { ApiCommunication } from "./components/Communication/ApiCommunication";
 import { Api } from "./components/base/Api";
 import { API_URL } from "./utils/constants";
+import { EventEmitter } from './components/base/Events';
 
-const productsModel = new Products(); //Объект - экземпляр класса Products
-const cartModel = new Cart(); //Объект - экземпляр класса Cart
-const buyerModel = new Buyer(); //Объект - экземпляр класса Buyer
+const events = new EventEmitter(); //Объект - экземпляр класса EventEmitter - брокера событий
+
+const productsModel = new Products(events); //Объект - экземпляр класса Products
+const cartModel = new Cart(events); //Объект - экземпляр класса Cart
+const buyerModel = new Buyer(events); //Объект - экземпляр класса Buyer
 
 //Проверка работы классов с локальными данными
 function checkMethods() {

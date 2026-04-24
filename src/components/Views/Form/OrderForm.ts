@@ -2,12 +2,16 @@ import {  ensureElement, ensureAllElements } from '../../../utils/utils';
 import {  Form } from '../../Views/Form/Form';
 import {  TPayment } from '../../../types/index';
 import {  IEvents } from '../../base/Events';
+import {  IBuyer } from '../../../types/index';
 
 interface IOrderForm {  
-  selectedButton: TPayment;
+  selectedButton: NonEmptyPayment;
 }
 
-export class OrderForm extends Form<IOrderForm> {
+type TOrderForm = Pick<IBuyer, 'address'>;
+type NonEmptyPayment = Exclude<TPayment, "">;
+
+export class OrderForm extends Form<IOrderForm & TOrderForm> {
     protected addressInput: HTMLInputElement;  //элемент инпута формы, отвечающего за адрес доставки
     protected orderButtons: HTMLButtonElement [];  //элемент кнопок, которые отвечают за вид оплаты
 
@@ -19,17 +23,20 @@ export class OrderForm extends Form<IOrderForm> {
 
         this.orderButtons.forEach(button => {
             button.addEventListener('click', () => {
-            this.events.emit('orderButton:click', { method: button.getAttribute('name') as TPayment });
+            this.events.emit('orderButton:click', { method: button.getAttribute('name') as NonEmptyPayment });
             })
         })
     }
 
+    //Устанавливает адрес доставки товара в инпут
+    set address(value: string) {
+        this.addressInput.value = value;
+    }
+
     //Устанавливает модификатор для выделения кнопки с выбранным видом оплаты
-    set selectedButton(method: TPayment) {
+    set selectedButton(method: NonEmptyPayment) {
         this.orderButtons.forEach(button => button.classList.remove('button_alt-active'));
         switch(method) {
-            case '':
-                break;
             case 'card':
                 const cardButton = this.orderButtons.find(button => button.getAttribute('name') === 'card' );
                 cardButton!.classList.add('button_alt-active');

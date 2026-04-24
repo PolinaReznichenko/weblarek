@@ -1,4 +1,3 @@
-import {  ensureElement } from '../../utils/utils';
 import {  Component } from '../base/Component';
 
 interface IGalleryData {
@@ -11,13 +10,11 @@ export class Gallery extends Component<IGalleryData> {
     constructor(container: HTMLElement) {
         super(container);  //вызов родительского конструктора
 
-        this.catalogElement = ensureElement<HTMLElement>('.gallery', this.container);
+        this.catalogElement = this.container;
     }
 
     //Добавляет массив карточек товаров в галерею
     set catalog(items: HTMLElement[]) {
-        items.forEach(item => {
-            this.catalogElement.appendChild(item);
-        })
+        this.catalogElement.replaceChildren(...items);
     }
 }
