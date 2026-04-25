@@ -25,12 +25,4 @@ export class ContactsForm extends Form<TContactsForm> {
     set phone(value: string) {
         this.phoneInput.value = value;
     }
-
-    //Очищает все поля формы
-    resetForm(): void {
-        this.emailInput.value = '';
-        this.phoneInput.value = '';
-        this.disabledButton = true;
-        this.error = '';
-    }
 }

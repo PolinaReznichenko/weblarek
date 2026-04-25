@@ -5,7 +5,11 @@ import { IProduct } from '../../../types/index';
 
 type TPreviewCard = Pick<IProduct, 'description' | 'price'>;
 
-export class PreviewCard extends FullCard<TPreviewCard> {
+interface IPreviewCard {
+    buttonText: string;
+}
+
+export class PreviewCard extends FullCard<TPreviewCard & IPreviewCard> {
     protected descriptionElement: HTMLElement;  //элемент, содержащий подробное описание товара в карточке
     protected cardButton: HTMLButtonElement;  //элемент кнопки, которая либо добавляет товар в корзину, либо удаляет его из корзины, или указывает на невозможность покупки
 
@@ -25,14 +29,19 @@ export class PreviewCard extends FullCard<TPreviewCard> {
         this.descriptionElement.textContent = value;
     }
 
+    set buttonText(text: string) {
+        this.cardButton.textContent = text;
+    }
+
     //Если у товара нет цены, кнопка в карточке блокируется и меняет название
     set price(value: number | null) {
         if (value && typeof value === "number") {
             this.priceElement.textContent = `${String(value)} синапсов`;
+            this.cardButton.disabled = false;
         } else {
             this.priceElement.textContent = `Бесценно`;
             this.cardButton.disabled = true;
-            this.cardButton.textContent = 'Недоступно';
+            this.buttonText = 'Недоступно';
         }
     }
 }

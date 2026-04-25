@@ -3,6 +3,7 @@ import {  Component } from '../base/Component';
 import {  IEvents } from '../base/Events';
 
 interface IBasket {
+    disabledProcessButton: boolean;
     cardList: HTMLElement[];
     basketTotal: number;
 }
@@ -24,6 +25,11 @@ export class Basket extends Component<IBasket> {
         })
     }
 
+    //Делает кнопку активной или блокирует ее
+    set disabledProcessButton(disabled: boolean) {
+        this.processButton.disabled = disabled;
+    }
+
     //Добавляет массив карточек товаров в корзину
     set cardList(items: HTMLElement[]) {
         this.cardListElement.replaceChildren(...items);
@@ -31,7 +37,6 @@ export class Basket extends Component<IBasket> {
 
     //Устанавливает итоговую стоимость всех выбранных товаров
     set basketTotal(value: number) {
-        const total = String(value);  //нужно ли или можно число?
-        this.basketPriceElement.textContent = `${total} синапсов`;
+        this.basketPriceElement.textContent = `${value} синапсов`;
     }
 }

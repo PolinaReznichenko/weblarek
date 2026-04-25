@@ -16,7 +16,7 @@ export class Modal extends Component<IModalData> {
         this.modalContent = ensureElement<HTMLElement>('.modal__content', this.container);
 
         //Обработчик закрытия модального окна по клику на иконку «Закрыть» (крестик)
-        this.modalButton.addEventListener('click', this.close);
+        this.modalButton.addEventListener('click', () => this.close());
 
         //Обработчик закрытия модального окна по клику вне модального окна 
         this.container.addEventListener('click', (e) => {
@@ -33,13 +33,13 @@ export class Modal extends Component<IModalData> {
 
     //Открытие модального окна, при котором в него вставляется элемент с содержимым и устанавливается запрет на скролл модалки
     open(content: HTMLElement): void {
-        this.container.classList.add( 'modal_active');
         this.content = content;
+        this.container.classList.add('modal_active');
     }
 
     //Закрытие модального окна и очистка содержимого
     close(): void {
         this.modalContent.replaceChildren();
-        this.container.classList.remove( 'modal_active');
+        this.container.classList.remove('modal_active');
     }
 }

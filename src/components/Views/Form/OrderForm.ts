@@ -1,15 +1,14 @@
 import {  ensureElement, ensureAllElements } from '../../../utils/utils';
 import {  Form } from '../../Views/Form/Form';
-import {  TPayment } from '../../../types/index';
+import {  NonEmptyPayment } from '../../../types/index';
 import {  IEvents } from '../../base/Events';
 import {  IBuyer } from '../../../types/index';
 
 interface IOrderForm {  
   selectedButton: NonEmptyPayment;
-}
+};
 
 type TOrderForm = Pick<IBuyer, 'address'>;
-type NonEmptyPayment = Exclude<TPayment, "">;
 
 export class OrderForm extends Form<IOrderForm & TOrderForm> {
     protected addressInput: HTMLInputElement;  //элемент инпута формы, отвечающего за адрес доставки
@@ -46,13 +45,5 @@ export class OrderForm extends Form<IOrderForm & TOrderForm> {
                 cashButton!.classList.add('button_alt-active');
                 break;
         }
-    }
-
-    //Очищает все поля формы
-    resetForm(): void {
-        this.orderButtons.forEach(button => button.classList.remove('button_alt-active'));
-        this.addressInput.value = '';
-        this.disabledButton = true;
-        this.error = '';
     }
 }

@@ -23,7 +23,6 @@ export class OrderSuccess extends Component<IOrderSuccess> {
 
     //Устанавливает итоговую сумму покупки
     set totalPrice(value: number) {
-        const total = String(value);  //нужно ли или можно число?
-        this.totalElement.textContent = `Списано ${total} синапсов`;
+        this.totalElement.textContent = `Списано ${value} синапсов`;
     }
 }

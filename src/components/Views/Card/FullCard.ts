@@ -2,6 +2,7 @@ import {  Card } from '../../Views/Card/Card';
 import {  ensureElement } from '../../../utils/utils';
 import { categoryMap } from '../../../utils/constants';
 import { IProduct } from '../../../types/index';
+import { CDN_URL } from "../../../utils/constants";
 
 type CategoryKey = keyof typeof categoryMap;
 
@@ -30,8 +31,10 @@ export abstract class FullCard<T> extends Card<TFullCard & T> {
         }
     }
 
-    //Устанавливает адрес изображения для отображения картинки в карточке
+    //Устанавливает адрес изображения для отображения картинки в карточке и меняет расширения файлов с svg на png
     set image(value: string) {
-        this.setImage(this.imageElement, value, this.title);
+        const pngUrl = value.replace(/\.svg$/, '.png');
+        const src = `${CDN_URL}${pngUrl}`;
+        this.setImage(this.imageElement, src, this.title);
     }
 }

@@ -21,6 +21,7 @@ export interface IProduct {
 
 //Тип данных способа оплаты товара
 export type TPayment = "card" | "cash" | "";
+export type NonEmptyPayment = Exclude<TPayment, "">;
 
 //Данные о покупателе (основной интерфейс)
 export interface IBuyer {
@@ -44,7 +45,7 @@ export interface IProductsResponse {
   items: IProduct[];
 }
 
-//Данные о покупателе, выбранных товарах и итоговой смоимости, отправляемые на сервер (POST)
+//Данные о покупателе, выбранных товарах и итоговой стоимости, отправляемые на сервер (POST)
 export interface IOrderData extends IBuyer {
   total: number;
   items: string[];

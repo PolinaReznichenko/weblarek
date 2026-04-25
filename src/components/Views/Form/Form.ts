@@ -46,7 +46,4 @@ export abstract class Form<T> extends Component<IForm & T> {
     set error(message: string) {
         this.errorElement.textContent = message;
     }
-
-    //Абстрактный метод, который очищает все поля формы
-    abstract resetForm(): void;
 }
