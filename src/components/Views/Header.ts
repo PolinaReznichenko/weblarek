@@ -1,28 +1,28 @@
-import {  ensureElement } from '../../utils/utils';
-import {  Component } from '../base/Component';
-import {  IEvents } from '../base/Events';
+import { ensureElement } from "../../utils/utils";
+import { Component } from "../base/Component";
+import { IEvents } from "../base/Events";
 
 interface IHeader {
-    counter: number;
+  counter: number;
 }
 
 export class Header extends Component<IHeader> {
-    protected counterElement: HTMLElement;  //элемент счетчика, отображающий количество товаров в корзине
-    protected basketButton: HTMLButtonElement;  //элемент кнопки, при нажатии на которую открывается корзина товаров
+  protected counterElement: HTMLElement; //элемент счетчика, отображающий количество товаров в корзине
+  protected basketButton: HTMLButtonElement; //элемент кнопки, при нажатии на которую открывается корзина товаров
 
-    constructor(container: HTMLElement, protected events: IEvents) {
-        super(container);  //вызов родительского конструктора
+  constructor(container: HTMLElement, protected events: IEvents) {
+    super(container); //вызов родительского конструктора
 
-        this.counterElement = ensureElement<HTMLElement>('.header__basket-counter', this.container);
-        this.basketButton = ensureElement<HTMLButtonElement>('.header__basket', this.container);
+    this.counterElement = ensureElement<HTMLElement>(".header__basket-counter", this.container);
+    this.basketButton = ensureElement<HTMLButtonElement>(".header__basket", this.container);
 
-        this.basketButton.addEventListener('click', () => {
-            this.events.emit('basket:open');
-        })
-    }
+    this.basketButton.addEventListener("click", () => {
+      this.events.emit("basket:open");
+    });
+  }
 
-    //Изменение значения счетчика товаров
-    set counter(value: number) {
-        this.counterElement.textContent = String(value);
-    }
+  //Изменение значения счетчика товаров
+  set counter(value: number) {
+    this.counterElement.textContent = String(value);
+  }
 }

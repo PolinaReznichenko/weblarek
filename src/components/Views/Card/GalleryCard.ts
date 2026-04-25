@@ -1,13 +1,13 @@
-import { ICardActions } from '../../../types/index';
-import {  FullCard } from '../../Views/Card/FullCard';
-import {  TFullCard } from '../../Views/Card/FullCard';
+import { ICardActions } from "../../../types/index";
+import { FullCard } from "../../Views/Card/FullCard";
+import { TFullCard } from "../../Views/Card/FullCard";
 
 export class GalleryCard extends FullCard<TFullCard> {
-    constructor(container: HTMLElement, actions?: ICardActions) {  //передается обработчик (функция) с эмитом события с данными
-        super(container);  //вызов родительского конструктора
+  constructor(container: HTMLElement, actions?: ICardActions) { //передается обработчик (функция), которая эмитит событие в презентере
+    super(container); //вызов родительского конструктора
 
-        if (actions?.onClick) {
-            this.container.addEventListener('click', actions.onClick); //вызывается обработчик после клика
-        }
+    if (actions?.onClick) {
+      this.container.addEventListener("click", actions.onClick); //вызывается обработчик после клика
     }
+  }
 }
