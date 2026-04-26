@@ -35,13 +35,13 @@ export class PreviewCard extends FullCard<TPreviewCard & IPreviewCard> {
 
   //Если у товара нет цены, кнопка в карточке блокируется и меняет название
   set price(value: number | null) {
-    if (value && typeof value === "number") {
-      this.priceElement.textContent = `${String(value)} синапсов`;
-      this.cardButton.disabled = false;
-    } else {
+    if (value === null) {
       this.priceElement.textContent = `Бесценно`;
       this.cardButton.disabled = true;
       this.buttonText = "Недоступно";
+    } else {
+      this.priceElement.textContent = `${value} синапсов`;
+      this.cardButton.disabled = false;
     }
   }
 }

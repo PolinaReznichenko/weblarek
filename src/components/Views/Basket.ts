@@ -23,6 +23,8 @@ export class Basket extends Component<IBasket> {
     this.processButton.addEventListener("click", () => {
       this.events.emit("basket:makeOrder");
     });
+
+    this.disabledProcessButton = true; //кнопка по умолчанию заблокирована
   }
 
   //Делает кнопку активной или блокирует ее

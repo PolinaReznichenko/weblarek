@@ -234,9 +234,6 @@ interface IGalleryData {
  Конструктор:  
  `constructor(container: HTMLElement)` - В конструктор передается HTML элемент, отвечающий за блок кода, который представляет класс.  
 
- Поля класса:  
- `protected catalogElement: HTMLElement` - поле для хранения HTML элемента, который представляет блок каталога с карточками товаров.  
-
  Методы класса:  
 `set catalog(items: HTMLElement[]): void` - метод, который добавляет массив карточек товаров в галерею.  
 

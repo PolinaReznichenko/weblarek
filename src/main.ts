@@ -60,19 +60,19 @@ const appApi = new ApiCommunication(api); // объект - экземпляр �
 async function loadProductsByApi() {
   // функция для загрузки данных о товарах с сервера и сохранения полученного массива товаров
   try {
-    const response = await appApi.getProducts();
-    if (response && Array.isArray(response.items)) {
-      const productsArr = response.items;
-      productsModel.productsSet = productsArr; //cохранение массива товаров от сервера
-      console.log(
-        "Каталог товаров, полученный с сервера: ",
+    const response = await appApi.getProducts();  //TS проверит соответствие типу ответа IProductsResponse
+    const productsArr = response.items;
+    productsModel.productsSet = productsArr; //cохранение массива товаров от сервера
+    console.log("Каталог товаров, полученный с сервера: ",
         productsModel.productsGet,
-      ); //получение массива товаров
-    }
+    ); //получение массива товаров
   } catch (error) {
     console.error("Произошла ошибка загрузки данных", error);
   }
 }
+
+//Вызываем выполнение асинхронной функции загрузки данных с сервера, запускается промис, который выполняется параллельно
+loadProductsByApi();
 
 // ------------------------Презентер----------
 
@@ -89,16 +89,9 @@ events.on("products:changed", () => {
   gallery.render({ catalog: itemCards });
 });
 
-//Дожидаемся выполнения функции загрузки данных с сервера,чтобы можно было применять методы классов
-await loadProductsByApi();
-
 //---обработчик нажатия на кнопку открытия корзины
 events.on("basket:open", () => {
   modal.open(basket.render());
-  if (cartModel.getTotalQuantity() === 0) {
-    basket.disabledProcessButton = true;
-    basket.cardList = [];
-  }
 });
 
 //---обработчик изменения содержимого корзины. Внутри него при клике на кнопку удаления товара из корзины эмитится событие basket:cardDeleted
@@ -111,13 +104,8 @@ events.on("basket:changed", () => {
     basketCard.index = index + 1; //порядковый номер товара
     return basketCard.render(item);
   });
-  if (cartModel.getTotalQuantity() === 0) {  //если нет товаров, то блокируем кнопку и вместо списка товаров выводится надпись «Корзина пуста»
-    basket.disabledProcessButton = true;
-    basket.cardList = [];
-  } else {
-    basket.disabledProcessButton = false;
-    basket.cardList = basketCardsArray; //добавляем массив карточек в блок корзины
-  }
+  basket.disabledProcessButton = cartModel.getTotalQuantity() === 0; //если нет товаров, то блокируем кнопку и вместо списка товаров выводится надпись «Корзина пуста»
+  basket.cardList = basketCardsArray;  //добавляем массив карточек в блок корзины (может быть пустым)
   header.counter = cartModel.getTotalQuantity(); //меняем значение счетчика товаров в шапке
   basket.basketTotal = cartModel.getTotalCost(); //меняем общую стоимость товаров
 });
@@ -136,7 +124,7 @@ events.on("card:selected", (item: IProduct) => {
 events.on("selectProduct:changed", () => {
   const selectedProduct = productsModel.productGet;
   if (selectedProduct) {
-    if (cartModel.checkProductById(selectedProduct.id) === true) {
+    if (cartModel.checkProductById(selectedProduct.id)) {
       previewCard.buttonText = "Удалить из корзины";
     } else {
       previewCard.buttonText = "Купить";
@@ -150,7 +138,7 @@ events.on("selectProduct:changed", () => {
 events.on("card:add", () => {
   const selectedProduct = productsModel.productGet;
   if (selectedProduct) {
-    if (cartModel.checkProductById(selectedProduct.id) === true) {  //проверяем, есть ли выбранный товар в корзине
+    if (cartModel.checkProductById(selectedProduct.id)) {  //проверяем, есть ли выбранный товар в корзине
       cartModel.deleteCartProduct(selectedProduct);
     } else {
       cartModel.addProductToCart(selectedProduct);
@@ -172,40 +160,20 @@ events.on("buyerData:changed", () => {
   //устанавливаем номер телефона в инпут
   contactsForm.phone = buyerModel.buyerData.phone;
 
-  //если нет ошибок, выбран способ оплаты и поле адреса доставки непустое, то активируем кнопку
-  if (
-    buyerModel.validateBuyerData.length === 0 &&
-    buyerModel.buyerData.payment !== "" &&
-    buyerModel.buyerData.address !== ""
-  ) {
-    orderForm.disabledButton = false;
-  } else {
-    orderForm.disabledButton = true;
-  }
-  //если нет ошибок и поля почты и телефона непустые, то активируем кнопку
-  if (
-    buyerModel.validateBuyerData.length === 0 &&
-    buyerModel.buyerData.email !== "" &&
-    buyerModel.buyerData.phone !== ""
-  ) {
-    contactsForm.disabledButton = false;
-  } else {
-    contactsForm.disabledButton = true;
-  }
+  //валидируем данные, получаем объект ошибок
+  const errors = buyerModel.validateBuyerData();
 
-  //если какое-то поле не заполнено, то появляется сообщение об ошибке
-  orderForm.error = "";
-  contactsForm.error = "";
-  const errorMessages = buyerModel.validateBuyerData();
-  if (errorMessages.payment) {
-    orderForm.error = errorMessages.payment;
-  } else if (errorMessages.address) {
-    orderForm.error = errorMessages.address;
-  } else if (errorMessages.email) {
-    contactsForm.error = errorMessages.email;
-  } else if (errorMessages.phone) {
-    contactsForm.error = errorMessages.phone;
-  }
+  //формируем тексты сообщений ошибок для каждой формы
+  const orderErrors = [errors.payment, errors.address].filter(Boolean).join('; ');
+  const contactsErrors = [errors.email, errors.phone].filter(Boolean).join('; ');
+
+  //если какое-то поле не заполнено, то появляется сообщение об ошибке. Либо если все поля пустые, то сообщение обо всех ошибках
+  orderForm.error = orderErrors;
+  contactsForm.error = contactsErrors;
+
+  //если ошибки есть, то кнопка блокируется, если нет ошибок, то активируем кнопку
+  orderForm.disabledButton = orderErrors !== '';
+  contactsForm.disabledButton = contactsErrors !== '';
 });
 
 //---обработчик нажатия на кнопку в корзине для перехода к оформлению заказа
